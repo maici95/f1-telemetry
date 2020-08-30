@@ -2,6 +2,14 @@
 
 
 const Parse = require('./Parse');
+const PacketHeader = require('./Packets/PacketHeader');
+const MotionPacket = require('./Packets/MotionPacket');
+const SessionPacket = require('./Packets/SessionPacket');
+const LapData = require('./Packets/LapData');
+const Participants = require('./Packets/Participants');
+const CarSetups = require('./Packets/CarSetups');
+const CarTelemetry = require('./Packets/CarTelemetry');
+const CarStatus = require('./Packets/CarStatus');
 
 // Parser class
 module.exports = class Parser {
@@ -11,7 +19,10 @@ module.exports = class Parser {
 
         this.data = {}
         this.temp = {}
-        this.array = []
+        this.array = [];
+
+        this.read(PacketHeader);
+        this.readBody(this.data.PacketHeader.packetId);
     }
 
     /**
@@ -19,6 +30,38 @@ module.exports = class Parser {
      */
     read(packet) {
         packet(this);
+    }
+
+    /**
+     * Read packet's body
+     */
+    readBody(pId) {
+        switch (pId) {
+            case 0:
+                this.read(MotionPacket);
+                break;
+            case 1:
+                this.read(SessionPacket);
+                break;
+            case 2:
+                this.read(LapData);
+                break;
+            case 4:
+                this.read(Participants);
+                break;
+            case 5:
+                this.read(CarSetups);
+                break;
+            case 6:
+                this.read(CarTelemetry);
+                break;
+            case 7:
+                this.read(CarStatus);
+                break;
+            default:
+                console.log('no packet for id: ' + pId);
+                break;
+        }
     }
 
     /**
