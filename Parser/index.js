@@ -14,15 +14,24 @@ module.exports = class Parser {
         this.array = []
     }
 
+    /**
+     * Read data from buffer
+     */
     read(packet) {
         packet(this);
     }
 
+    /**
+     * Save temp object in data object
+     */
     saveObject(key) {
         this.data[key] = this.temp;
         this.temp = {}
         return this;
     }
+    /**
+     * Merge data[key] and temp objects
+     */
     addToObject(key) {
         this.data[key] = {
             ...this.data[key],
@@ -32,12 +41,18 @@ module.exports = class Parser {
         return this;
     }
 
+    /**
+     * Push temp object to array
+     */
     toArray() {
         this.array.push(this.temp);
         this.temp = {}
         return this;
     }
 
+    /**
+     * Save array in data object
+     */
     saveArray(key) {
         this.data[key] = this.array;
         this.array = [];

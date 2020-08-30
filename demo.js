@@ -7,9 +7,6 @@ const fs = require('fs');
 const Parser = require('./Parser');
 const dgram = require('dgram');
 const server = dgram.createSocket('udp4');
-const mongo = require('mongodb');
-
-const mongoUrl = `mongodb://127.0.0.1:27017/?compressors=zlib&gssapiServiceName=mongodb`;
 
 const PORT = 20777;
 
@@ -23,6 +20,7 @@ const CarTelemetry = require('./Parser/Packets/CarTelemetry');
 const CarStatus = require('./Parser/Packets/CarStatus');
 
 //fs.readFile('./data/data_1344.buf', (error, data) => {
+//const msg = data;
 
 server.on('message', (msg, rinfo) => {
     const p = new Parser(msg);
@@ -58,21 +56,7 @@ server.on('message', (msg, rinfo) => {
             break;
     }
 
-    mongo.connect(mongoUrl, (error, db) => {
-        if (error) {
-            console.log(error);
-        }
-        const dbo = db.db('f12020');
-
-        dbo.collection('packets').insertOne(p, (error, result) => {
-            if (error) {
-                console.log(error);
-            }
-
-            db.close();
-        });
-
-    });
+    console.log(p);
 
 });
 
