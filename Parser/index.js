@@ -10,6 +10,8 @@ const Participants = require('./Packets/Participants');
 const CarSetups = require('./Packets/CarSetups');
 const CarTelemetry = require('./Packets/CarTelemetry');
 const CarStatus = require('./Packets/CarStatus');
+const EventPacket = require('./Packets/EventPacket');
+
 
 // Parser class
 module.exports = class Parser {
@@ -46,6 +48,9 @@ module.exports = class Parser {
             case 2:
                 this.read(LapData);
                 break;
+            case 3:
+                this.read(EventPacket);
+                break;
             case 4:
                 this.read(Participants);
                 break;
@@ -62,6 +67,14 @@ module.exports = class Parser {
                 console.log('no packet for id: ' + pId);
                 break;
         }
+    }
+
+    /**
+     * Create new object in data object
+     */
+    createObject(key) {
+        this.data[key] = {}
+        return this;
     }
 
     /**
@@ -94,10 +107,22 @@ module.exports = class Parser {
     }
 
     /**
-     * Save array in data object
+     * Add array in data object
      */
     saveArray(key) {
         this.data[key] = this.array;
+        this.array = [];
+        return this;
+    }
+
+    /**
+     *
+     */
+    saveArrayTo(key, key2) {
+        this.data[key] = {
+            ...this.data[key],
+            [key2]: this.array
+        }
         this.array = [];
         return this;
     }

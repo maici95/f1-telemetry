@@ -3,6 +3,10 @@
 
 // motion packet
 module.exports = function MotionPacket(p) {
+
+
+    p.createObject('motion');
+
     for (let i = 0; i < 22; i++) {
         p
         .float('worldPositionX')
@@ -27,7 +31,7 @@ module.exports = function MotionPacket(p) {
     }
     
     p
-        .saveArray('carMotionData')
+        .saveArrayTo('motion', 'carMotionData')
         .arr('suspensionPosition', 'float', 4)
         .arr('suspensionVelocity', 'float', 4)
         .arr('suspensionAcceleration', 'float', 4)
@@ -43,5 +47,5 @@ module.exports = function MotionPacket(p) {
         .float('angularAccelerationY')
         .float('angularAccelerationZ')
         .float('frontWheelsAngle')
-        .saveObject('PacketMotionData')
+        .addToObject('motion')
 }

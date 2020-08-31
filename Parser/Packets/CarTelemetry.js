@@ -4,6 +4,8 @@
 module.exports = function CarTelemetry(p) {
     for (let i = 0; i < 22; i++) {
 
+    p.createObject('telemetry');
+
     p
         .uint16('speed')
         .float('throttle')
@@ -24,10 +26,10 @@ module.exports = function CarTelemetry(p) {
     }
 
     p
-        .saveArray('carTelemetryData')
+        .saveArrayTo('telemetry', 'carTelemetryData')
         .uint32             ('buttonStatus')
         .uint8              ('mfdPanelIndex')
         .uint8              ('mfdPanelIndexSecondaryPlayer')
         .int8               ('suggestedGear')
-        .saveObject('carTelemtry')
+        .addToObject('telemetry')
 }

@@ -2,9 +2,12 @@
 
 
 module.exports = function Participants(p) {
+
+    p.createObject('participants');
+
     p
         .uint8('numActiveCars')
-        .saveObject('packetParticipantsData')
+        .addToObject('participants')
 
     for (let i = 0; i < 22; i++) {
         p
@@ -18,6 +21,6 @@ module.exports = function Participants(p) {
             .toArray()
     }
     
-    p.saveArray('participants')
+    p.saveArrayTo('participants', 'participants')
 
 }

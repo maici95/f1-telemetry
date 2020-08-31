@@ -3,6 +3,9 @@
 
 // session packet
 module.exports = function SessionPacket(p) {
+
+    p.createObject('session');
+
     p
         .uint8('weather')
         .int8('trackTemperature')
@@ -20,7 +23,7 @@ module.exports = function SessionPacket(p) {
         .uint8('spectatorCarIndex')
         .uint8('sliProNativeSupport')
         .uint8('numMarshalZones')
-        .saveObject('PacketSessionData')
+        .addToObject('session')
 
         for (let i = 0; i < 21; i++) {
             p
@@ -30,11 +33,11 @@ module.exports = function SessionPacket(p) {
         }
 
         p
-            .saveArray('marshalZones')
+            .saveArrayTo('session', 'marshalZones')
             .uint8('safetyCarStatus')
             .uint8('networkGame')
             .uint8('numWeatherForecastSamples')
-            .addToObject('PacketSessionData')
+            .addToObject('session')
 
         for (let i = 0; i < 20; i++) {
             p
@@ -46,5 +49,5 @@ module.exports = function SessionPacket(p) {
                 .toArray()
         }
         
-        p.saveArray('weatherForecastSamples')
+        p.saveArrayTo('session', 'weatherForecastSamples')
 }
