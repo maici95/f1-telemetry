@@ -35,6 +35,16 @@ export default class Struct {
         this.tmp = {};
     }
 
+    reset() {
+        this.buffer = null;
+        this.pointer = 0;
+        this.data = {};
+        this.tmp = {};
+    }
+
+    setBuffer(buffer) {
+        this.buffer = buffer;
+    }
 
     /**
      * @param {Function} type 

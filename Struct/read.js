@@ -48,14 +48,14 @@ export function readInt32(struct) {
 
 /** @param {Struct} struct */
 export function readInt64(struct) {
-    const value = struct.buffer.readBigInt64LE(sturct.pointer);
+    const value = 0;
     struct.pointer += 8;
     return value;
 }
 
 /** @param {Struct} struct */
 export function readUInt64(struct) {
-    const value = struct.buffer.readBigUInt64LE(struct.pointer);
+    const value = 0;
     struct.pointer += 8;
     return value;
 }
