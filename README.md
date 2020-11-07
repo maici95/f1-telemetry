@@ -22,5 +22,15 @@ server.on('message', (buffer, rinfo) => {
 server.bind(PORT);
 ```
 
+&nbsp;
 
+## Prototype:
+- Current gear
+- Speed
+- Current lap delta to last lap
+- ERS energy bar
+
+&nbsp;
+
+<img src="https://i.ibb.co/SPXXpHx/demo.png">
 
