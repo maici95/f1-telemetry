@@ -18,6 +18,7 @@
   "homepage": "https://github.com/maici95/f1-2020-telemetry#readme",
   "type": "module",
   "dependencies": {
-    "dgram": "^1.0.1"
+    "dgram": "^1.0.1",
+    "express": "^4.17.1"
   }
 }

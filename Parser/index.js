@@ -32,6 +32,23 @@ export default class Parser {
         this.buffer = buffer;
         this.struct = new Struct();
         this.data = {};
+
+        this.ini();
+    }
+
+    /** Add types for struct class */
+    ini() {
+        this.struct
+            .use(CarMotionData)
+            .use(MarshalZone)
+            .use(WeatherForecastSample)
+            .use(LapData)
+            .use(ParticipantData)
+            .use(CarSetupData)
+            .use(CarTelemetryData)
+            .use(CarStatusData)
+            .use(FinalClassificationData)
+            .use(LobbyInfoData)
     }
 
     /** @param {Buffer} buffer */
@@ -41,25 +58,21 @@ export default class Parser {
         this.struct.setBuffer(buffer);
 
         try {
-            this.struct.object('PacketHeader', PacketHeader);
+            this.struct.object('packetHeader', PacketHeader);
     
-            switch (this.struct.data.PacketHeader.packetId) {
+            switch (this.struct.data.packetHeader.packetId) {
                 case 0:
                     this.struct
-                        .use(CarMotionData)
                         .object('PacketMotionData', PacketMotionData)
                     break;
     
                 case 1:
                     this.struct
-                        .use(MarshalZone)
-                        .use(WeatherForecastSample)
                         .object('PacketSessionData', PacketSessionData)
                     break;
     
                 case 2:
                     this.struct
-                        .use(LapData)
                         .object('PacketLapPada', PacketLapData)
                     break;
     
@@ -70,37 +83,31 @@ export default class Parser {
     
                 case 4:
                     this.struct
-                        .use(ParticipantData)
                         .object('PacketParticipantsData', PacketParticipantsData)
                     break;
     
                 case 5:
                     this.struct
-                        .use(CarSetupData)
                         .object('PacketCarSetupData', PacketCarSetupData)
                     break;
     
                 case 6:
                     this.struct
-                        .use(CarTelemetryData)
                         .object('PacketCarTelemetryData', PacketCarTelemetryData)
                     break;
     
                 case 7:
                     this.struct
-                        .use(CarStatusData)
                         .object('PacketCarStatusData', PacketCarStatusData)
                     break;
     
                 case 8:
                     this.struct
-                        .use(FinalClassificationData)
                         .object('PacketFinalClassificationData', PacketFinalClassificationData)
                     break;
     
                 case 9:
                     this.struct
-                        .use(LobbyInfoData)
                         .object('PacketLobbyInfoData', PacketLobbyInfoData)
                     break;
                 
