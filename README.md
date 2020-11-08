@@ -20,7 +20,9 @@
 
 
 ## How to use display
-- Run demo.js
+- Install **NodeJS**
+- Run **npm install**
+- Run **demo.js**
 - Open browser and go to **localhost:3000**
 
 ### How to use smartphone as display
