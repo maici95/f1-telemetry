@@ -5,6 +5,7 @@ const UPDATE_FREQ = 1000 / 10;
 const GREEN = '#00CC01';
 const RED = '#FF0100';
 const TARGET = 0.3;
+const OVERTAKE_COLOR = '#00CC01';
 
 const LED0_COLOR = '#00FF00';
 const LED1_COLOR = '#FF0000';
@@ -16,6 +17,7 @@ const NORMAL = '#ddd';
 const ENGINE_TEMP_TARGET = 125;
 const TYRE_TEMP_TARGET = 100;
 
+// Fetch data from server
 function fetchData() {
     return new Promise((resolve, reject) => {
     fetch('/data')
@@ -26,6 +28,7 @@ function fetchData() {
     });
 }
 
+// Get flag color by index
 const flagColor = flag => ({
     0: 'none',      // none
     1: '#00CC01',   // green
@@ -34,6 +37,15 @@ const flagColor = flag => ({
     4: '#FF0100'    // red
 }[flag]);
 
+// Fuel mix
+const fuelMix = mode => ({
+    0: 'lean',
+    1: 'normal',
+    2: 'high',
+    3: 'max'
+}[mode]);
+
+// Get color by tyre wear
 const tyreColor = wear => {
     if (wear > TYRE_WEAR_WARNING) {
         return RED;
@@ -42,17 +54,19 @@ const tyreColor = wear => {
     }
 }
 
+// Convert seconds to HH:MM:SS format
 const secondsToHMS = seconds => {
     let h = Math.floor(seconds / 3600);
     let m = Math.floor(seconds % 3600 / 60);
     let s = seconds % 60;
-
+    
     m = m < 10 ? '0'+m : m;
     s = s < 10 ? '0'+s : s;
 
     return h+':'+m+':'+s;
 }
 
+// App component
 function App() {
 
     const [loaded, setLoaded] = React.useState(false);
@@ -63,6 +77,16 @@ function App() {
     const [carSetup, setCarSetup] = React.useState({});
     const [carTelemetry, setCarTelemetry] = React.useState({});
     const [carStatus, setCarStatus] = React.useState({});
+    const [tyreView, setTyreView] = React.useState(0);
+
+    function changeTyreView() {
+        let view = tyreView;
+        view++;
+        if (view > 1) {
+            view = 0;
+        }
+        setTyreView(view);
+    }
 
     React.useEffect(() => {
         if (!loaded) {
@@ -84,6 +108,7 @@ function App() {
         }
     });
 
+    // Engine warning
     const [engineWarning, setEngineWarning] = React.useState(false);
     React.useEffect(() => {
         if (carTelemetry.engineTemperature > ENGINE_TEMP_TARGET) {
@@ -93,6 +118,7 @@ function App() {
         }
     }, [carTelemetry])
 
+    // Tyre temperature warning
     const [tyreTempWarning, setTyreTempWarning] = React.useState(false);
     React.useEffect(() => {
         if (carTelemetry.tyresInnerTemperature) {
@@ -107,6 +133,7 @@ function App() {
         }
     }, [carTelemetry]);
 
+    // Frontwing damage warning
     const [frontWingWarning, setFrontWingWarning] = React.useState(false);
     React.useEffect(() => {
         if (carStatus) {
@@ -118,29 +145,68 @@ function App() {
         }
     }, [carStatus]);
 
+    // Tyre wear warning
+    const [tyreWearWarning, setTyreWearWarning] = React.useState(false);
+    React.useEffect(() => {
+        if (carStatus.tyresDamage) {
+            let warning = false;
+            for (let i of carStatus.tyresDamage) {
+                if (i > TYRE_WEAR_WARNING) {
+                    warning = true;
+                    break;
+                }
+            }
+            setTyreWearWarning(warning);
+        }
+    }, [carStatus]);
+
     // Last lap delta
     const [miniIndex, setMiniIndex] = React.useState(0);
     const [lastLap, setLastLap] = React.useState([]);
     const [currentLap, setCurrentLap] = React.useState([]);
+    const [bestLap, setBestLap] = React.useState([]);
     const [lapNum, setLapNum] = React.useState(null);
     const [lapDelta, setLapDelta] = React.useState(0);
+    const [lapDeltaView, setLapDeltaView] = React.useState(0);
+
+    function changeDeltaView() {
+        let view = lapDeltaView;
+        view++;
+        if (view > 1) {
+            view = 0;
+        }
+        setLapDeltaView(view);
+    }
 
     React.useEffect(() => {
+
+        console.log(bestLap);
+
         if (lapData.lapDistance > miniIndex * 100) {
             setMiniIndex(miniIndex + 1);
             setCurrentLap([...currentLap, lapData.currentLapTime]);
         }
-
         if (lapNum !== lapData.currentLapNum) {
+            const index = currentLap.length - 1;
+            if (bestLap.length < 1 || !bestLap[index]) {
+                setBestLap(currentLap);
+            }
+            if (bestLap[index] > currentLap[index]) {
+                setBestLap(currentLap);
+            }
             setLapNum(lapData.currentLapNum);
             setLastLap([...currentLap]);
             setMiniIndex(0);
             setCurrentLap([]);
         }
-
         if (lastLap.length > 0 && currentLap.length > 0) {
             const index = currentLap.length - 1;
-            setLapDelta((lastLap[index] - currentLap[index]));
+            if (lapDeltaView === 0) {
+                setLapDelta((lastLap[index] - currentLap[index]));
+            }
+            if (lapDeltaView === 1) {
+                setLapDelta((bestLap[index] - currentLap[index]));
+            }
         }
     }, [session]);
 
@@ -172,32 +238,45 @@ function App() {
                 {engineWarning && <Warning>Engine temps</Warning>}
                 {tyreTempWarning && <Warning>Tyre temps</Warning>}
                 {frontWingWarning && <Warning>Frontwing damage</Warning>}
+                {tyreWearWarning && <Warning>Tyre wear</Warning>}
             </LinePanel>
             <div>
                 <Column size="m">
-                    <div className="small" style={{
+                    <div
+                        onClick={() => changeDeltaView()}
+                        className="small" style={{
                         color: Math.abs(lapDelta) < TARGET ? '#fff'
                             : lapDelta < TARGET * -1 ? RED
                             : GREEN
                         }}>
-                        <div className="label">delta</div>
-                        {lapDelta.toFixed(2)}
+                        <div className="label">{lapDeltaView === 0 ? 'last' : 'best'}</div>
+                        {(lapDelta * -1).toFixed(2)}
                     </div>
 
                     <div className="small">
                         
                     </div>
-                    {carStatus.tyresWear &&
-                    <div className="highlighted">
-                        <div className="small" style={{display: 'flex'}}>
-                            <div style={{color: tyreColor(carStatus.tyresWear[2])}} className="half">{carStatus.tyresWear[2] || 0}</div>
-                            <div style={{color: tyreColor(carStatus.tyresWear[3])}} className="half">{carStatus.tyresWear[3] || 0}</div>
+
+                    {carStatus.tyresWear && carTelemetry.tyresInnerTemperature &&
+                        <div className="highlighted" onClick={() => changeTyreView()}>
+                            <div className="label">{tyreView === 0 ? '%' : '℃'}</div>
+                            <div className="small" style={{display: 'flex'}}>
+                                <div className="half">
+                                    {tyreView === 0 ? carStatus.tyresWear[2] : carTelemetry.tyresInnerTemperature[2]}
+                                </div>
+                                <div className="half">
+                                    {tyreView === 0 ? carStatus.tyresWear[3] : carTelemetry.tyresInnerTemperature[3]}
+                                </div>
+                            </div>
+                            <div className="small" style={{display: 'flex'}}>
+                                <div className="half">
+                                    {tyreView === 0 ? carStatus.tyresWear[0] : carTelemetry.tyresInnerTemperature[0]}
+                                </div>
+                                <div className="half">
+                                    {tyreView === 0 ? carStatus.tyresWear[1] : carTelemetry.tyresInnerTemperature[1]}
+                                </div>
+                            </div>
                         </div>
-                        <div className="small" style={{display: 'flex'}}>
-                            <div style={{color: tyreColor(carStatus.tyresWear[0])}} className="half">{carStatus.tyresWear[0] || 0}</div>
-                            <div style={{color: tyreColor(carStatus.tyresWear[1])}} className="half">{carStatus.tyresWear[1] || 0}</div>
-                        </div>
-                    </div>
                     }
                 </Column>
 
@@ -205,8 +284,12 @@ function App() {
                     <div className={'big highlighted'} style={{background: flagColor(carStatus.vehicleFiaFlags)}}>
                         {carTelemetry.gear || 'N'}
                     </div>
-                    <div className="small" style={{color: '#C71585'}}>
-                        <div className="label">speed</div>
+                    <div className="small highlighted"
+                        style={{
+                            color: 'cyan',
+                            background: carStatus.ersDeployMode === 2 ? OVERTAKE_COLOR : 'none'
+                            }}>
+                        <div className="label" style={{color: '#fff'}}>speed</div>
                         {carTelemetry.speed || 0}
                     </div>
                 </Column>
@@ -219,6 +302,14 @@ function App() {
                     <div className="small">
                         <div className="label">last</div>
                         {(lapData.lastLapTime || 0).toFixed(2)}
+                    </div>
+
+                    <div className="small">
+                            
+                    </div>
+                    <div className="small">
+                        <div className="label">{fuelMix(carStatus.fuelMix)}</div>
+                            {(carStatus.fuelRemainingLaps || 0).toFixed(2)}
                     </div>
                 </Column>
 
@@ -240,6 +331,7 @@ function LEDPanel(props) {
     );
 }
 
+// Led component
 function LED(props) {
     let style = {};
     if (props.active) {
@@ -253,6 +345,7 @@ function LED(props) {
     );
 }
 
+// Info text component
 function Info(props) {
     return (
         <div className="info-text">
@@ -260,6 +353,8 @@ function Info(props) {
         </div>
     );
 }
+
+// Warning text component
 function Warning(props) {
     return (
         <div className="warning-text">
@@ -268,6 +363,7 @@ function Warning(props) {
     );
 }
 
+// Line panel for text components
 function LinePanel(props) {
     return (
         <div className="line-panel">
@@ -275,6 +371,8 @@ function LinePanel(props) {
         </div>
     );
 }
+
+// Column
 function Column(props) {
     const colWidth =
           props.size === 'l' ? '35vw'
@@ -293,6 +391,7 @@ function Column(props) {
 }
 
 
+// Render display
 ReactDOM.render(
     <App />,
     document.querySelector('#root')

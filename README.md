@@ -5,19 +5,27 @@
 
 &nbsp;
 
-## Display show following information
+## Display show following information "features"
 - RPM lights
-- Current lap number/ total laps
+  - Green lights reserved for DRS
+- Current lap number / total laps
 - Session time
-- Warnings for **Tires** and **Engine temperatures** and **frontwing damage**
-- Current lap delta against last lap
+- Current lap delta
+  - On *tap/ click* change between **Best** and **Last** lap
 - Gear
-- Current laptime
-- Last laptime
-- Tires wear
+- Current lap time
+- Last lap time
+- Tyres information
+  - On *tap/ click* change between **Wear** and **temperature**
 - Speed
-- ERS energy remaining
+  - ERS Overtake mode active
+- Waved flag
+- Fuel mix
+  - Laps fuel remaining
+- ERS store remaining
 
+
+&nbsp;
 
 ## How to use display
 - Run demo.js
@@ -58,5 +66,4 @@ server.bind(PORT);
 
 &nbsp;
 
-<img src="https://i.ibb.co/GCKWDv4/demo.png">
-
+<img src="https://i.ibb.co/LvnKVZw/demo.png">
