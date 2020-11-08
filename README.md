@@ -2,7 +2,37 @@
 
 
 
-## How to use:
+
+&nbsp;
+
+## Display show following information
+- RPM lights
+- Current lap number/ total laps
+- Session time
+- Warnings for **Tires** and **Engine temperatures** and **frontwing damage**
+- Current lap delta against last lap
+- Gear
+- Current laptime
+- Last laptime
+- Tires wear
+- Speed
+- ERS energy remaining
+
+
+## How to use display
+- Run demo.js
+- Open browser and go to **localhost:3000**
+
+### How to use smartphone as display
+- open **cmd**
+- type **ipconfig** and press enter
+- Check IPv4 address example **192.168.0.105**
+- Open **192.168.0.105:3000** on your smartphone's browser
+
+
+&nbsp;
+
+## How to use parser
 ``` javascript
 import dgram from 'dgram';
 import Parser from './Parser/index.js';
@@ -24,13 +54,9 @@ server.bind(PORT);
 
 &nbsp;
 
-## Prototype:
-- Current gear
-- Speed
-- Current lap delta to last lap
-- ERS energy bar
+## Current display view
 
 &nbsp;
 
-<img src="https://i.ibb.co/SPXXpHx/demo.png">
+<img src="https://i.ibb.co/GCKWDv4/demo.png">
 
