@@ -23,6 +23,11 @@
 - Fuel mix
   - Laps fuel remaining
 - ERS store remaining
+- Warning texts
+  - Engine temperature
+  - Tyres temperature
+  - Frontwing damage
+  - Tyre wear
 
 
 &nbsp;
