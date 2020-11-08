@@ -21,7 +21,7 @@
 
 ## How to use display
 - Install **NodeJS**
-- Run **npm install**
+- Open cmd and run **npm install**
 - Run **demo.js**
 - Open browser and go to **localhost:3000**
 
