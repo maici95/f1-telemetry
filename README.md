@@ -21,7 +21,7 @@
 
 ## How to use display
 - Install **NodeJS**
-- Open cmd and run **npm install**
+- Open cmd and run **npm install** in f1-2020-telemetry directory
 - Run **demo.js**
 - Open browser and go to **localhost:3000**
 
