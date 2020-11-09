@@ -1,7 +1,7 @@
 // packet : PacketHeader
 
 
-export default function PacketHeader(struct) {
+module.exports = function PacketHeader(struct) {
 struct
     .uint16('packetFormat')
     .uint8('gameMajorVersion')

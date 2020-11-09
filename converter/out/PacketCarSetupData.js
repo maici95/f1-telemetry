@@ -1,7 +1,7 @@
 // packet : PacketCarSetupData
 
 
-export default function PacketCarSetupData(struct) {
+module.exports = function PacketCarSetupData(struct) {
 struct
     .CarSetupData('carSetups', 22)
 }

@@ -1,7 +1,7 @@
 // packet : ParticipantData
 
 
-export default function ParticipantData(struct) {
+module.exports = function ParticipantData(struct) {
 struct
     .uint8('aiControlled')
     .uint8('driverId')

@@ -1,7 +1,7 @@
 // packet : PacketSessionData
 
 
-export default function PacketSessionData(struct) {
+module.exports = function PacketSessionData(struct) {
 struct
     .uint8('weather')
     .int8('trackTemperature')

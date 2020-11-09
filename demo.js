@@ -3,9 +3,9 @@
 
 console.clear();
 
-import dgram from 'dgram';
-import Parser from './Parser/index.js';
-import Server from './Server/index.js';
+const dgram = require('dgram');
+const Parser = require('./Parser/index.js');
+const Server = require('./Server/index.js');
 
 const server = dgram.createSocket('udp4');
 const PORT = 20777;

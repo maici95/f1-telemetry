@@ -1,7 +1,7 @@
 // packet : PacketMotionData
 
 
-export default function PacketMotionData(struct) {
+module.exports = function PacketMotionData(struct) {
 struct
     .CarMotionData('carMotionData', 22)
     .float('suspensionPosition', 4)

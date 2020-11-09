@@ -1,8 +1,8 @@
 
 
 
-import fs from 'fs';
-import convert from './index.js';
+const fs = require('fs');
+const convert = require('./index.js');
 
 fs.readdir('./', (error, result) => {
     for (let i of result) {

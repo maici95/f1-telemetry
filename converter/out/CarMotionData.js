@@ -1,7 +1,7 @@
 // packet : CarMotionData
 
 
-export default function CarMotionData(struct) {
+module.exports = function CarMotionData(struct) {
 struct
     .float('worldPositionX')
     .float('worldPositionY')

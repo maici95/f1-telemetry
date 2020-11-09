@@ -1,7 +1,7 @@
 // packet : FinalClassificationData
 
 
-export default function FinalClassificationData(struct) {
+module.exports = function FinalClassificationData(struct) {
 struct
     .uint8('position')
     .uint8('numLaps')

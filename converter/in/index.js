@@ -4,10 +4,10 @@
 console.clear();
 
 
-import fs from 'fs';
+const fs = require('fs');
 
 
-export default function convert(inFile, outFile) {
+module.exports = function convert(inFile, outFile) {
     const file = inFile;
     
     let data = fs.readFileSync(file, 'utf8', (error, data) => data);
@@ -66,7 +66,7 @@ export default function convert(inFile, outFile) {
     
     output += `// packet : ${packetName}\n\n\n`;
     
-    output += `export default function ${packetName}(struct) {\n`;
+    output += `module.exports = function ${packetName}(struct) {\n`;
     output += 'struct\n';
     
     for (let i of objects) {

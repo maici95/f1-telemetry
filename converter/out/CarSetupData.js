@@ -1,7 +1,7 @@
 // packet : CarSetupData
 
 
-export default function CarSetupData(struct) {
+module.exports = function CarSetupData(struct) {
 struct
     .uint8('frontWing')
     .uint8('rearWing')
