@@ -16,9 +16,11 @@
     "url": "https://github.com/maici95/f1-2020-telemetry/issues"
   },
   "homepage": "https://github.com/maici95/f1-2020-telemetry#readme",
-  "type": "module",
+  "type": "commonjs",
   "dependencies": {
     "dgram": "^1.0.1",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "http": "0.0.1-security",
+    "socket.io": "^3.0.1"
   }
 }

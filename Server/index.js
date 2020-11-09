@@ -1,15 +1,15 @@
 
 
 
-import express from 'express';
-import { fileURLToPath } from 'url';
+const express = require('express');
+/* import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __dirname = dirname(__filename);*/
 
 
-export default class Server {
+
+module.exports = class Server {
     constructor() {
         this.app = express();
         this.routes();
@@ -25,7 +25,7 @@ export default class Server {
 
     // Update parsed packet
     setPacket(packet) {
-        const packetId = packet.packetHeader.packetId;
+        const packetId = packet.PacketHeader.packetId;
 
         if (packetId || packetId === 0) {
             this.packets[packetId] = packet;
@@ -39,11 +39,17 @@ export default class Server {
 
     // api routes
     routes() {
-        // Get html page
+        // Get html page -- Proto version of HUD
         this.app.get('/', (req, res) => {
             res.sendFile(__dirname + '/public/index.html');
         });
 
+        // New version of HUD
+        this.app.get('/hud', (req, res) => {
+            res.sendFile(__dirname + '/public/HUD/index.html');
+        });
+
+        // Get data
         this.app.get('/data', (req, res) => {
             res.send(this.packets);
         });

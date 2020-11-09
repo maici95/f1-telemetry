@@ -81,6 +81,7 @@ const secondsToHMS = seconds => {
 function App() {
 
     const [loaded, setLoaded] = React.useState(false);
+    const [inter, setInter] = React.useState(null);
     const [header, setHeader] = React.useState({});
     const [motion, setMotion] = React.useState({});
     const [session, setSession] = React.useState({});
@@ -101,7 +102,7 @@ function App() {
 
     React.useEffect(() => {
         if (!loaded) {
-            setInterval(() => {
+/*             setInterval(() => {
                 fetchData().then(result => {
                     if (result.length > 1) {
                         const pId = result[0].packetHeader.playerCarIndex;
@@ -114,10 +115,26 @@ function App() {
                         setCarStatus({...result[7].carStatusData[pId]});
                     }
                 });
-            }, UPDATE_FREQ);
+            }, UPDATE_FREQ); */
+            const inter = setInterval(fData, UPDATE_FREQ);
             setLoaded(true);
         }
     });
+
+    function fData() {
+        fetchData().then(result => {
+            if (result.length > 1) {
+                const pId = result[0].PacketHeader.playerCarIndex;
+                setHeader(result[0].PacketHeader);
+                setMotion({...result[0].carMotionData[pId], ...result[0].PacketMotionData});
+                setSession({...result[1]});
+                setLapData({...result[2].lapData[pId]});
+                setCarSetup({...result[5].carSetups[pId]});
+                setCarTelemetry({...result[6].carTelemetryData[pId]});
+                setCarStatus({...result[7].carStatusData[pId]});
+            }
+        });
+    }
 
     // Engine warning
     const [engineWarning, setEngineWarning] = React.useState(false);
@@ -334,7 +351,6 @@ function App() {
                 </Column>
 
                 <Column size="s">
-                    {/*<div style={{width:'100%', height:(100 - (carStatus.ersStoreEnergy / 4000000) * 100)+'%'}}></div> */}
                     <div style={{position: 'relative', height:'100%'}}>
                         <div className='ers-bar' style={{height:(carStatus.ersStoreEnergy / 4000000) * 100+'%'}}></div>
                         <div className='ers-bar-rem' style={{height:((4000000 - carStatus.ersDeployedThisLap) / 4000000) * 100+'%'}}></div>

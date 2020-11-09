@@ -1,7 +1,7 @@
 // packet : LobbyInfoData
 
 
-export default function LobbyInfoData(struct) {
+module.exports = function LobbyInfoData(struct) {
 struct
     .uint8('aiControlled')
     .uint8('teamId')

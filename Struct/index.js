@@ -1,27 +1,30 @@
 
 
 
-import { readFloat, readInt16, readInt32, readInt64, readInt8, readUInt16, readUInt32, readUInt64, readUInt8, readChar, readDouble } from './read.js';
+//const { readFloat, readInt16, readInt32, readInt64, readInt8, readUInt16, readUInt32, readUInt64, readUInt8, readChar, readDouble } = require('./read.js');
+
+const Read = require('./read');
+//const { readFloat, readInt16, readInt32, readInt64, readInt8, readUInt16, readUInt32, readUInt64, readUInt8, readChar, readDouble } = Read;
 
 /**
  * @param {String} key
  * @returns {Function}
 */
 const Reader = key => ({
-    uint8: readUInt8,
-    int8: readInt8,
-    uint16: readUInt16,
-    int16: readInt16,
-    uint32: readUInt32,
-    int32: readInt32,
-    uint64: readUInt64,
-    int64: readInt64,
-    float: readFloat,
-    double: readDouble,
-    char: readChar
+    uint8: Read.readUInt8,
+    int8: Read.readInt8,
+    uint16: Read.readUInt16,
+    int16: Read.readInt16,
+    uint32: Read.readUInt32,
+    int32: Read.readInt32,
+    uint64: Read.readUInt64,
+    int64: Read.readInt64,
+    float: Read.readFloat,
+    double: Read.readDouble,
+    char: Read.readChar
 }[key]);
 
-export default class Struct {
+module.exports = class Struct {
     /**
      * @param {Buffer} buffer 
      */
@@ -110,7 +113,7 @@ export default class Struct {
      */
     uint8(key, length) {
         if (!length) {
-            this.tmp[key] = readUInt8(this);
+            this.tmp[key] = Read.readUInt8(this);
         }
         if (length) {
             this.tmp[key] = this.array('uint8', length);
@@ -124,7 +127,7 @@ export default class Struct {
      */
     int8(key, length) {
         if (!length) {
-            this.tmp[key] = readInt8(this);
+            this.tmp[key] = Read.readInt8(this);
         }
         if (length) {
             this.tmp[key] = this.array('int8', length);
@@ -138,7 +141,7 @@ export default class Struct {
      */
     uint16(key, length) {
         if (!length) {
-            this.tmp[key] = readUInt16(this);
+            this.tmp[key] = Read.readUInt16(this);
         }
         if (length) {
             this.tmp[key] = this.array('uint16', length);
@@ -152,7 +155,7 @@ export default class Struct {
      */
     int16(key, length) {
         if (!length) {
-            this.tmp[key] = readInt16(this);
+            this.tmp[key] = Read.readInt16(this);
         }
         if (length) {
             this.tmp[key] = this.array('int16', length);
@@ -166,7 +169,7 @@ export default class Struct {
      */
     uint32(key, length) {
         if (!length) {
-            this.tmp[key] = readUInt32(this);
+            this.tmp[key] = Read.readUInt32(this);
         }
         if (length) {
             this.tmp[key] = this.array('uint32', length);
@@ -180,7 +183,7 @@ export default class Struct {
      */
     int32(key, length) {
         if (!length) {
-            this.tmp[key] = readInt32(this);
+            this.tmp[key] = Read.readInt32(this);
         }
         if (length) {
             this.tmp[key] = this.array('int32', length);
@@ -194,7 +197,7 @@ export default class Struct {
      */
     uint64(key, length) {
         if (!length) {
-            this.tmp[key] = readUInt64(this);
+            this.tmp[key] = Read.readUInt64(this);
         }
         if (length) {
             this.tmp[key] = this.array('uint64', length);
@@ -208,7 +211,7 @@ export default class Struct {
      */
     int64(key, length) {
         if (!length) {
-            this.tmp[key] = readInt64(this);
+            this.tmp[key] = Read.readInt64(this);
         }
         if (length) {
             this.tmp[key] = this.array('int64', length);
@@ -222,7 +225,7 @@ export default class Struct {
      */
     float(key, length) {
         if (!length) {
-            this.tmp[key] = readFloat(this);
+            this.tmp[key] = Read.readFloat(this);
         }
         if (length) {
             this.tmp[key] = this.array('float', length);
@@ -232,7 +235,7 @@ export default class Struct {
 
     double(key, length) {
         if (!length) {
-            this.tmp[key] = readDouble(this);
+            this.tmp[key] = Read.readDouble(this);
         }
         return this;
     }
@@ -243,7 +246,7 @@ export default class Struct {
      */
     char(key, length) {
         if (length) {
-            this.tmp[key] = readChar(this, length);
+            this.tmp[key] = Read.readChar(this, length);
         }
         return this;
     }

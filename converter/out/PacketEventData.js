@@ -1,6 +1,7 @@
 // packet : PacketEventData
 
 
-export default function PacketEventData(struct) {
+module.exports = function PacketEventData(struct) {
+
 
 }

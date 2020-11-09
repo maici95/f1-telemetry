@@ -1,7 +1,7 @@
 // packet : CarStatusData
 
 
-export default function CarStatusData(struct) {
+module.exports = function CarStatusData(struct) {
 struct
     .uint8('tractionControl')
     .uint8('antiLockBrakes')

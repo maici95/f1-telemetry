@@ -1,7 +1,7 @@
 // packet : PacketCarTelemetryData
 
 
-export default function PacketCarTelemetryData(struct) {
+module.exports = function PacketCarTelemetryData(struct) {
 struct
     .CarTelemetryData('carTelemetryData', 22)
     .uint32('buttonStatus')

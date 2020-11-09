@@ -1,7 +1,7 @@
 // packet : PacketLapData
 
 
-export default function PacketLapData(struct) {
+module.exports = function PacketLapData(struct) {
 struct
     .LapData('lapData', 22)
 }

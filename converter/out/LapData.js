@@ -1,7 +1,7 @@
 // packet : LapData
 
 
-export default function LapData(struct) {
+module.exports = function LapData(struct) {
 struct
     .float('lastLapTime')
     .float('currentLapTime')

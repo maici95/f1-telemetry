@@ -1,33 +1,33 @@
 
 
 
-import CarMotionData from '../converter/out/CarMotionData.js';
-import CarSetupData from '../converter/out/CarSetupData.js';
-import CarStatusData from '../converter/out/CarStatusData.js';
-import CarTelemetryData from '../converter/out/CarTelemetryData.js';
-import FinalClassificationData from '../converter/out/FinalClassificationData.js';
-import LapData from '../converter/out/LapData.js';
-import LobbyInfoData from '../converter/out/LobbyInfoData.js';
-import MarshalZone from '../converter/out/MarshalZone.js';
-import ParticipantData from '../converter/out/ParticipantData.js';
-import WeatherForecastSample from '../converter/out/WeatherForecastSample.js';
+const CarMotionData = require('../converter/out/CarMotionData.js');
+const CarSetupData = require('../converter/out/CarSetupData.js');
+const CarStatusData = require('../converter/out/CarStatusData.js');
+const CarTelemetryData = require('../converter/out/CarTelemetryData.js');
+const FinalClassificationData = require('../converter/out/FinalClassificationData.js');
+const LapData = require('../converter/out/LapData.js');
+const LobbyInfoData = require('../converter/out/LobbyInfoData.js');
+const MarshalZone = require('../converter/out/MarshalZone.js');
+const ParticipantData = require('../converter/out/ParticipantData.js');
+const WeatherForecastSample = require('../converter/out/WeatherForecastSample.js');
 
-import PacketCarSetupData from '../converter/out/PacketCarSetupData.js';
-import PacketCarStatusData from '../converter/out/PacketCarStatusData.js';
-import PacketCarTelemetryData from '../converter/out/PacketCarTelemetryData.js';
-import PacketEventData from '../converter/out/PacketEventData.js';
-import PacketFinalClassificationData from '../converter/out/PacketFinalClassificationData.js';
-import PacketHeader from '../converter/out/PacketHeader.js';
-import PacketLapData from '../converter/out/PacketLapData.js';
-import PacketLobbyInfoData from '../converter/out/PacketLobbyInfoData.js';
-import PacketMotionData from '../converter/out/PacketMotionData.js';
-import PacketParticipantsData from '../converter/out/PacketParticipantsData.js';
-import PacketSessionData from '../converter/out/PacketSessionData.js';
+const PacketCarSetupData = require('../converter/out/PacketCarSetupData.js');
+const PacketCarStatusData = require('../converter/out/PacketCarStatusData.js');
+const PacketCarTelemetryData = require('../converter/out/PacketCarTelemetryData.js');
+const PacketEventData = require('../converter/out/PacketEventData.js');
+const PacketFinalClassificationData = require('../converter/out/PacketFinalClassificationData.js');
+const PacketHeader = require('../converter/out/PacketHeader.js');
+const PacketLapData = require('../converter/out/PacketLapData.js');
+const PacketLobbyInfoData = require('../converter/out/PacketLobbyInfoData.js');
+const PacketMotionData = require('../converter/out/PacketMotionData.js');
+const PacketParticipantsData = require('../converter/out/PacketParticipantsData.js');
+const PacketSessionData = require('../converter/out/PacketSessionData.js');
 
-import Struct from '../Struct/index.js';
+const Struct = require('../Struct/index.js');
 
 
-export default class Parser {
+module.exports = class Parser {
     constructor(buffer) {
         this.buffer = buffer;
         this.struct = new Struct();
@@ -58,9 +58,9 @@ export default class Parser {
         this.struct.setBuffer(buffer);
 
         try {
-            this.struct.object('packetHeader', PacketHeader);
-    
-            switch (this.struct.data.packetHeader.packetId) {
+            this.struct.object('PacketHeader', PacketHeader);
+
+            switch (this.struct.data.PacketHeader.packetId) {
                 case 0:
                     this.struct
                         .object('PacketMotionData', PacketMotionData)
@@ -118,6 +118,7 @@ export default class Parser {
     
         } catch (error) {
             console.log('Failed to parse packet');
+            throw error;
         }
 
         this.data = this.struct.data;

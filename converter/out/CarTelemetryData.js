@@ -1,7 +1,7 @@
 // packet : CarTelemetryData
 
 
-export default function CarTelemetryData(struct) {
+module.exports = function CarTelemetryData(struct) {
 struct
     .uint16('speed')
     .float('throttle')
