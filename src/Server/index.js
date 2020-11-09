@@ -15,8 +15,6 @@ const PORT = 20777;
 
 server.on('message', (buffer, rinfo) => {
     parser.parse(buffer);
-
-
     io.emit('packet', { data: parser.data})
 });
 
@@ -28,8 +26,3 @@ app.get('/', (req, res) => {
 
 http.listen(3000);
 server.bind(PORT);
-
-
-
-
-
