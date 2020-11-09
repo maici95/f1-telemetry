@@ -22,6 +22,7 @@
   "homepage": "https://github.com/maici95/f1-2020-telemetry#readme",
   "type": "commonjs",
   "dependencies": {
+    "cors": "^2.8.5",
     "dgram": "^1.0.1",
     "express": "^4.17.1",
     "http": "0.0.1-security",
