@@ -5,7 +5,7 @@ const UPDATE_FREQ = 1000 / 10;
 const GREEN = '#00CC01';
 const RED = '#FF0100';
 const TARGET = 0.3;
-const OVERTAKE_COLOR = '#00CC01';
+const OVERTAKE_COLOR = '#FF00FF';
 
 const LED0_COLOR = '#00FF00';
 const LED1_COLOR = '#FF0000';
@@ -26,6 +26,17 @@ function fetchData() {
             resolve(result);
         });
     });
+}
+
+// Gear
+function getGear(gear) {
+    if (gear === -1) {
+        return 'R';
+    }
+    if (gear === 0) {
+        return 'N';
+    }
+    return gear;
 }
 
 // Get flag color by index
@@ -179,9 +190,6 @@ function App() {
     }
 
     React.useEffect(() => {
-
-        console.log(bestLap);
-
         if (lapData.lapDistance > miniIndex * 100) {
             setMiniIndex(miniIndex + 1);
             setCurrentLap([...currentLap, lapData.currentLapTime]);
@@ -282,7 +290,7 @@ function App() {
 
                 <Column size="l">
                     <div className={'big highlighted'} style={{background: flagColor(carStatus.vehicleFiaFlags)}}>
-                        {carTelemetry.gear || 'N'}
+                        {getGear(carTelemetry.gear) || 'N'}
                     </div>
                     <div className="small highlighted"
                         style={{
@@ -309,13 +317,28 @@ function App() {
                     </div>
                     <div className="small">
                         <div className="label">{fuelMix(carStatus.fuelMix)}</div>
-                            {(carStatus.fuelRemainingLaps || 0).toFixed(2)}
+                            {/* {(carStatus.fuelRemainingLaps || 0).toFixed(2)} */}
+
+                            {(carStatus.fuelRemainingLaps || 0).toString().split('.').map((e, i) => {
+                                if (i === 0) {
+                                    return e + '.';
+                                }
+                                if (i === 1) {
+                                    return (
+                                        <span style={{fontSize: '7vh'}}>{e.slice(0, 3)}</span>
+                                    );
+                                }
+                            })}
+
                     </div>
                 </Column>
 
                 <Column size="s">
-                    <div style={{width:'100%', height:(100 - (carStatus.ersStoreEnergy / 4000000) * 100)+'%'}}></div>
-                    <div className='ers-bar' style={{width:'100%', height:(carStatus.ersStoreEnergy / 4000000) * 100+'%'}}></div>
+                    {/*<div style={{width:'100%', height:(100 - (carStatus.ersStoreEnergy / 4000000) * 100)+'%'}}></div> */}
+                    <div style={{position: 'relative', height:'100%'}}>
+                        <div className='ers-bar' style={{height:(carStatus.ersStoreEnergy / 4000000) * 100+'%'}}></div>
+                        <div className='ers-bar-rem' style={{height:((4000000 - carStatus.ersDeployedThisLap) / 4000000) * 100+'%'}}></div>
+                    </div>
                 </Column>
             </div>
         </div>

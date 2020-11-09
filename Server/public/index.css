@@ -67,6 +67,22 @@ body {
         #111 4px,
         #111 6px
       );
+    position: absolute;
+    bottom: 0;
+    width: 70%;
+}
+.ers-bar-rem {
+    background: repeating-linear-gradient(
+        0,
+        #FF00FF,
+        #FF00FF 4px,
+        #111 4px,
+        #111 6px
+      );
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 30%;
 }
 
 
