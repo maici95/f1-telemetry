@@ -18,11 +18,11 @@ server.on('message', (buffer, rinfo) => {
     io.emit('packet', { data: parser.data})
 });
 
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/public/build'));
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/index.html');
+    res.sendFile(__dirname + '/public/build/index.html');
 })
 
-http.listen(3000);
+http.listen(3001);
 server.bind(PORT);
