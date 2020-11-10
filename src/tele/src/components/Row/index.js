@@ -8,8 +8,9 @@ import Label from '../Label';
 export default function Row(props) {
 
     const style = {
+        ...props.style,
         display: 'flex',
-        height: props.height || 0,
+        height: props.height || '10vh',
         width: props.width || '100%',
         lineHeight: props.lineHeight,
         background: props.background,

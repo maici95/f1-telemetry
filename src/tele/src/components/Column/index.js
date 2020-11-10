@@ -7,9 +7,12 @@ import Label from '../Label';
 export default function Column(props) {
 
     const style = {
-        width: props.width || 0,
-        height: props.height || '100%',
-        outline: '1px solid #444'
+        width: props.width || '100%',
+        height: props.height,
+        outline: '1px solid #444',
+        fontSize: props.fontSize,
+        lineHeight: props.lineHeight,
+        overflow: 'auto'
     }
 
     return (
