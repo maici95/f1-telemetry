@@ -100,6 +100,10 @@ function App() {
         setTyreView(view);
     }
 
+    function openInFullScreen() {
+        document.body.requestFullscreen();
+    }
+
     React.useEffect(() => {
         if (!loaded) {
 /*             setInterval(() => {
@@ -306,7 +310,8 @@ function App() {
                 </Column>
 
                 <Column size="l">
-                    <div className={'big highlighted'} style={{background: flagColor(carStatus.vehicleFiaFlags)}}>
+                    <div onClick={() => openInFullScreen()}
+                        className={'big highlighted'} style={{background: flagColor(carStatus.vehicleFiaFlags)}}>
                         {getGear(carTelemetry.gear) || 'N'}
                     </div>
                     <div className="small highlighted"
