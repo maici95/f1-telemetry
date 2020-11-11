@@ -3,6 +3,6 @@
 
 module.exports = function MarshalZone(struct) {
 struct
-    .float('zoneStart')
-    .int8('zoneFlag')
+	.float('zoneStart')
+	.int8('zoneFlag')
 }

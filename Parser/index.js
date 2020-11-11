@@ -26,11 +26,35 @@ const PacketSessionData = require('../converter/out/PacketSessionData.js');
 
 const Struct = require('../Struct/index.js');
 
+const Type = {
+    /** @type {import('../converter/out/types/PacketHeader_type')} */
+    PacketHeader : null,
+    /** @type {Array.<import('../converter/out/types/LapData_type')>} */
+    lapData: null,
+    /** @type {Array.<import('../converter/out/types/CarMotionData_type')>} */
+    carMotionData : null,
+    /** @type {Array.<import('../converter/out/types/CarTelemetryData_type')>} */
+    carTelemetryData : null,
+    /** @type {Array.<import('../converter/out/types/CarStatusData_type')>} */
+    carStatusData : null,
+    /** @type {Array.<import('../converter/out/types/MarshalZone_type')>} */
+    marshalZones : null,
+    /** @type {Array.<import('../converter/out/types/WeatherForecastSample_type')>} */
+    weatherForecastSamples : null,
+    /** @type {import('../converter/out/types/PacketSessionData_type')} */
+    test : null,
+    /** @type {Array.<import('../converter/out/types/CarSetupData_type')>} */
+    carSetups : null,
+    /** @type {Array.<import('../converter/out/types/ParticipantData_type')>} */
+    participants : null
+}
 
 module.exports = class Parser {
     constructor(buffer) {
         this.buffer = buffer;
         this.struct = new Struct();
+
+        /** @type {Type} */
         this.data = {};
 
         this.ini();
@@ -59,7 +83,6 @@ module.exports = class Parser {
 
         try {
             this.struct.object('PacketHeader', PacketHeader);
-
             switch (this.struct.data.PacketHeader.packetId) {
                 case 0:
                     this.struct

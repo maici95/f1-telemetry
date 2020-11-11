@@ -22,7 +22,9 @@
 - Waved flag
 - Fuel mix
   - Laps fuel remaining
-- ERS store remaining
+- ERS 
+  - Energy stored
+  - Energy remaining for lap
 - Warning texts
   - Engine temperature
   - Tyres temperature
@@ -73,4 +75,4 @@ server.bind(PORT);
 
 &nbsp;
 
-<img src="https://i.ibb.co/LvnKVZw/demo.png">
+<img src="https://i.ibb.co/SVbNKZ4/demo.png">

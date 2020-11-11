@@ -3,6 +3,6 @@
 
 module.exports = function PacketParticipantsData(struct) {
 struct
-    .uint8('numActiveCars')
-    .ParticipantData('participants', 22)
+	.uint8('numActiveCars')
+	.ParticipantData('participants', 22)
 }

@@ -18,10 +18,21 @@ const parser = new Parser();
 
 const PORT = 20777;
 
+let gear = 0;
+
+
 // Parse packet
 server.on('message', (buffer, rinfo) => {
     parser.parse(buffer);
-    io.emit('packet', { data: parser.data})
+    //io.emit('packet', {...parser.data})
+    //io.emit('packet', { gear: 3 });
+
+    const packetId = parser.data.PacketHeader.packetId;
+    const pId = parser.data.PacketHeader.playerCarIndex;
+    
+
+
+
 });
 
 app.use(cors());
@@ -36,8 +47,3 @@ app.get('/', (req, res) => {
 http.listen(3001);
 server.bind(PORT);
 
-
-// test
-setInterval(() => {
-    io.emit('packet', { msg: Array(10).fill(0).map(e => Math.floor(Math.random() * 10)) });
-}, 1000);

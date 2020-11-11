@@ -3,5 +3,5 @@
 
 module.exports = function PacketLapData(struct) {
 struct
-    .LapData('lapData', 22)
+	.LapData('lapData', 22)
 }

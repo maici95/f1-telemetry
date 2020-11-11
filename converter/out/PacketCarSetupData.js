@@ -3,5 +3,5 @@
 
 module.exports = function PacketCarSetupData(struct) {
 struct
-    .CarSetupData('carSetups', 22)
+	.CarSetupData('carSetups', 22)
 }
