@@ -12,7 +12,6 @@ export default function Led(props) {
         borderRadius: '100%'
     }
 
-
     const color = {
         background: props.active ? props.color || 'red' : '#161616',
         boxShadow:
@@ -22,8 +21,12 @@ export default function Led(props) {
             0 0 20px ${props.color || 'red'},
             0 0 50px ${props.color || 'red'},
             0 0 100px ${props.color || 'red'},
-            0 0 250px ${props.color || 'red'}
-            ` : 'none'
+            0 0 250px ${props.color || 'red'},
+            inset 5px 5px 10px ${props.color || 'red'},
+            inset 0 0 40px white
+            ` : `
+            none
+            `
     }
 
     return (

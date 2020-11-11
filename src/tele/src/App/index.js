@@ -13,81 +13,98 @@ import Row from '../components/Row';
 import Cell from '../components/Cell';
 import Bar from '../components/Bar';
 import Led from '../components/Led';
-const socket = io.connect('http://localhost:3001');
+const socket = io.connect('http://192.168.0.105:3001');
+
+const LED1_COLOR = '#66ff00';
+const LED2_COLOR = '#ff0066';
+const LED3_COLOR = '#ff00e6';
+
+const led_array = [
+    {active:false, color:LED1_COLOR},
+    {active:true, color:LED1_COLOR},
+    {active:false, color:LED1_COLOR},
+    {active:true, color:LED1_COLOR},
+    {active:false, color:LED1_COLOR},
+    {active:true, color:LED2_COLOR},
+    {active:false, color:LED2_COLOR},
+    {active:true, color:LED2_COLOR},
+    {active:false, color:LED2_COLOR},
+    {active:true, color:LED2_COLOR},
+    {active:false, color:LED3_COLOR},
+    {active:true, color:LED3_COLOR},
+    {active:false, color:LED3_COLOR},
+    {active:true, color:LED3_COLOR},
+    {active:false, color:LED3_COLOR},
+];
+
+
 
 export default function App() {
-    socket.on('packet', (packet) => {
-        // ... do stuff
+    const [leds, setLeds] = React.useState(led_array);
+    const [gear, setGear] = React.useState('t');
+
+    const [load, setLoad] = React.useState(false);
+    const [packet, setPacket] = React.useState(null);
+
+    const [test, setTest] = React.useState({
+        gear:0,
+        a:'test',
+        b:1,
+        c:2,
+        d:3
     });
 
+    React.useEffect(() => {
+        socket.on('packet', (packet) => {
+            // ... do stuff
+            //setGear(packet.gear);
+            
+            setPacket(packet);
+            setGear(packet.gear);
+
+            setTest({...test, ...packet});
+
+            console.log(packet);
+
+        });
+    }, [load]);
 
     function openInFullScreen() {
         document.body.requestFullscreen();
     }
 
 
-    const [load, setLoad] = React.useState(false);
-    const [led, setLed] = React.useState(false);
 
-    function leds() {
-        console.log(led);
-
-        let b = Math.random() > 0.5 ? true : false;
-        setLed(b);
-    }
-
-    React.useEffect(() => {
-        if (!load) {
-            setInterval(() => {
-
-                leds();
-            }, 1000);
-            setLoad(true);
-        }
-    }, [load, led])
 
     return (
         <Display>
             <Row height='14vh' background='#090909' style={{justifyContent: 'center'}}>
-                <Led active={led} color='#66ff00'></Led>
-                <Led active={led} color='#66ff00'></Led>
-                <Led active={led} color='#66ff00'></Led>
-                <Led active={led} color='#66ff00'></Led>
-                <Led active={led} color='#66ff00'></Led>
-                
-                <Led active={led} color='#ff0066'></Led>
-                <Led active={led} color='#ff0066'></Led>
-                <Led active={led} color='#ff0066'></Led>
-                <Led active={led} color='#ff0066'></Led>
-                <Led active={led} color='#ff0066'></Led>
-
-                <Led active={led} color='#ff00e6'></Led>
-                <Led active={led} color='#ff00e6'></Led>
-                <Led active={led} color='#ff00e6'></Led>
-                <Led active={led} color='#ff00e6'></Led>
-                <Led active={led} color='#ff00e6'></Led>
+                {leds.map((e, i) => {
+                    return (
+                        <Led key={i} color={e.color} active={e.active} />
+                    );
+                })}
             </Row>
             <Row height='10vh' lineHeight='10vh'>
 
             </Row>
             <Row height='76vh'>
-                <Column width='3vw'>
+                <Column width='2vw'>
                     <Bar height='76vh' value='0.266' main='gold'></Bar>
                 </Column>
 
                 <Column width='30vw' fontSize='7vh'>
-                    <Cell>1</Cell>
-                    <Cell>2</Cell>
-                    <Cell>3</Cell>
-                    <Cell>4</Cell>
-
+                    <Cell>{test.a}</Cell>
+                    <Cell>{test.gear}</Cell>
+                    <Cell>{test.c}</Cell>
+                    <Cell>{test.d}</Cell>
                 </Column>
 
-                <Column width='35vw'>
+                <Column width='40vw'>
                     <Cell height='48vh' fontSize='50vh'
                         onClick={() => openInFullScreen()}
                         label='gear'
-                    >N</Cell>
+                    >{gear}</Cell>
                 </Column>
 
                 <Column width='30vw'>

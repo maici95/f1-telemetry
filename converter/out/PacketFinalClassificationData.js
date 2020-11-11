@@ -3,6 +3,6 @@
 
 module.exports = function PacketFinalClassificationData(struct) {
 struct
-    .uint8('numCars')
-    .FinalClassificationData('classificationData', 22)
+	.uint8('numCars')
+	.FinalClassificationData('classificationData', 22)
 }

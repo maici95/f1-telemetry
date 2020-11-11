@@ -2,6 +2,5 @@
 
 
 module.exports = function PacketEventData(struct) {
-
-
+struct
 }

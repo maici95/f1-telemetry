@@ -1,8 +1,6 @@
 
 
 
-console.clear();
-
 
 const fs = require('fs');
 
@@ -11,25 +9,36 @@ module.exports = function convert(inFile, outFile) {
     const file = inFile;
     
     let data = fs.readFileSync(file, 'utf8', (error, data) => data);
+
+    console.log('----------------------------------------------------------');
     
-    
+    data = data.replace(/\//g, '');
     data = data.split('{');
-    
+
     const packetName = [...data[0].split('struct')][1].trim();
     const objects = [];
     
     data.splice(0, 1);
     
     data = data.toString().split('\r\n');
-    
+
+
     for (let i of data) {
         let item = i;
         let type = null;
         let key = null;
         let length = null;
-    
+
+
+
+        item = item.replace('\t', ' ');
+
         item = item.split(';');
-    
+
+        
+ 
+
+
         if (item.length > 1) {
             item = item.toString().split(/ +/g);
             if (item.length > 2) {
@@ -38,6 +47,7 @@ module.exports = function convert(inFile, outFile) {
             }
         }
     
+        
         if (type && key) {
             key = key.replace('m_','')
     
@@ -46,7 +56,6 @@ module.exports = function convert(inFile, outFile) {
             const i = {}
     
             if (match) {
-                console.log(match);
                 key = key.replace(match,'');
                 length = match[0].replace(/[\[\]]/g,'');
             }
@@ -62,6 +71,8 @@ module.exports = function convert(inFile, outFile) {
         }
     }
     
+
+
     let output = '';
     
     output += `// packet : ${packetName}\n\n\n`;
@@ -69,20 +80,42 @@ module.exports = function convert(inFile, outFile) {
     output += `module.exports = function ${packetName}(struct) {\n`;
     output += 'struct\n';
     
+
     for (let i of objects) {
-    
+        if (i.key === 'header') {
+            continue;
+        }
+
+        if (packetName === 'PacketEventData') {
+            continue;
+        }
+
         if (i.length) {
-            output += `    .${i.type}('${i.key}', ${i.length})`; 
+            output += `\t.${i.type}('${i.key}', ${i.length})`; 
         } else {
-            output += `    .${i.type}('${i.key}')`; 
+            output += `\t.${i.type}('${i.key}')`; 
         }
     
-        output += '\n';
-    
-    }
-    
+        output += '\n';    
+    }    
     output += '}\n';
+
+    let typeData = '\n\n\n';
+
+    typeData += `const ${packetName}_type = {\n`;
+
+    for (let i of objects) {
+        typeData += '\t'+i.key+': null,\n'
+    }
+
+    typeData += '}\n\n';
+    typeData += `module.exports = ${packetName}_type;\n`;
+
+
+    const typeFile = `${packetName}_type.js`;
+    fs.writeFileSync('../out/types/'+typeFile, typeData, 'utf8', () => {});
     
+
     fs.writeFile(outFile, output, 'utf8', (error) => {})
 }
 
