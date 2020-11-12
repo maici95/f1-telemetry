@@ -63,7 +63,7 @@ server.on('message', (buffer, rinfo) => {
     parser.parse(buffer);
 
     // Parsed data
-    console.log(buffer.data);
+    console.log(parser.data);
 });
 
 server.bind(PORT);
