@@ -8,10 +8,10 @@ export default function Cell(props) {
 
     const style = {
         width: props.width || '100%',
-        height: props.height || '12vh',
-        lineHeight: props.height || '12vh',
+        height: props.height || '10vh',
+        lineHeight: props.height || '10vh',
         textAlign: props.textAlign || 'center',
-        boxShadow: !props.noBorder && '0px 1px 0px #444',
+        //boxShadow: !props.noBorder && '0px 1px 0px #444',
         //borderBottom: props.border && '1px solid #444',
         fontSize: props.fontSize || parseFloat(props.height) * 0.8 + 'vh' || '10vh',
         position: 'relative'

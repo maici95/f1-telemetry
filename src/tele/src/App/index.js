@@ -40,48 +40,41 @@ const led_array = [
 
 
 export default function App() {
-    const [leds, setLeds] = React.useState(led_array);
-    const [gear, setGear] = React.useState('t');
-
-    const [load, setLoad] = React.useState(false);
-    const [packet, setPacket] = React.useState(null);
-
     const [test, setTest] = React.useState({
         gear:0,
-        a:'test',
-        b:1,
-        c:2,
-        d:3
+        leds: [1,1,1,1,1,1,1,1,1,1,0,0,0,0,0],
+        tyreTemps: [0, 0, 0, 0]
     });
 
-    React.useEffect(() => {
+    const [tyreTemps, setTyreTemps] = React.useState([0,0,0,0]);
+
+    const [l, setL] = React.useState([]);
+    const [ini, setIni] = React.useState(false);
+
+    const [packetN, setPacketN] = React.useState(0);
+
+    if (!ini) {
         socket.on('packet', (packet) => {
-            // ... do stuff
-            //setGear(packet.gear);
-            
-            setPacket(packet);
-            setGear(packet.gear);
-
+            setPacketN(packetN => packetN + 1);
             setTest({...test, ...packet});
+            setL(packet.test);
 
-            console.log(packet);
-
+            setTyreTemps(packet.tyreTemps);
         });
-    }, [load]);
+        setIni(true);
+    }
 
     function openInFullScreen() {
         document.body.requestFullscreen();
     }
 
 
-
-
     return (
         <Display>
             <Row height='14vh' background='#090909' style={{justifyContent: 'center'}}>
-                {leds.map((e, i) => {
+                {led_array.map((e, i) => {
                     return (
-                        <Led key={i} color={e.color} active={e.active} />
+                        <Led key={i} color={e.color} active={l[i]} />
                     );
                 })}
             </Row>
@@ -94,17 +87,26 @@ export default function App() {
                 </Column>
 
                 <Column width='30vw' fontSize='7vh'>
-                    <Cell>{test.a}</Cell>
-                    <Cell>{test.gear}</Cell>
-                    <Cell>{test.c}</Cell>
-                    <Cell>{test.d}</Cell>
+                    <Row border>
+                        <Cell>{packetN}</Cell>
+                    </Row>
+
+                    <Row label='c'>
+                        <Cell>{tyreTemps[0]}</Cell>
+                        <Cell>{tyreTemps[1]}</Cell>
+                    </Row>
+                    <Row border>
+                        <Cell>{tyreTemps[2]}</Cell>
+                        <Cell>{tyreTemps[3]}</Cell>
+                    </Row>
+                    
                 </Column>
 
                 <Column width='40vw'>
                     <Cell height='48vh' fontSize='50vh'
                         onClick={() => openInFullScreen()}
                         label='gear'
-                    >{gear}</Cell>
+                    >{test.gear}</Cell>
                 </Column>
 
                 <Column width='30vw'>

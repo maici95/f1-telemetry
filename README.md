@@ -1,7 +1,27 @@
 # F1 2020 Game - Data Telemetry Application
 
 
+## New telemetry
+*telemetry_example.js*
 
+``` javascript
+const Telemetry = require('./Telemetry');
+
+// Create new telemetry and start listening port 20777
+const tele = new Telemetry(20777);
+
+// Bind function to motion packet
+tele.addOnUpdate(motionPacketUpdated, ['motion']);
+
+// Binded function will be called on every motion packet received from game
+function motionPacketUpdated(packetName) {
+    const pId = tele.motion.header.playerCarIndex;
+    const playerCarMotion = tele.motion.carMotionData[pId]
+    console.log(
+        playerCarMotion
+    );
+}
+```
 
 &nbsp;
 
@@ -49,7 +69,7 @@
 
 &nbsp;
 
-## How to use parser
+## How to use parser (OLD)
 ``` javascript
 import dgram from 'dgram';
 import Parser from './Parser/index.js';
