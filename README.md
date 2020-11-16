@@ -1,7 +1,11 @@
 # F1 2020 Game - Data Telemetry Application
 
+Telemetry application for F1 2020 game from Codemasters.
 
-## New telemetry
+
+&nbsp;
+
+## **Telemetry**
 *telemetry_example.js*
 
 ``` javascript
@@ -22,6 +26,34 @@ function motionPacketUpdated(packetName) {
     );
 }
 ```
+
+## **Server** working with **Telemetry**
+*tele_demo.js*
+``` javascript
+const Telemetry = require('./Telemetry');
+const TeleLink = require('./TeleLink');
+
+// Start telemetry and telelink
+const tele = new Telemetry(20777);
+const link = new TeleLink(3000);
+
+// Bind function to car telemetry packet
+tele.addOnUpdate(telemetryData, ['carTelemetry']);
+
+// Binded function will be called on every carTelemetry packet received from game
+function telemetryData() {
+    const pId = tele.motion.header.playerCarIndex;
+    // Player car speed
+    const speed = tele.carTelemetry.carTelemetryData[pId].speed;
+    // Send speed value to client
+    link.emit('telemetry', { speed: speed });
+}
+```
+
+&nbsp;
+
+
+# Old version
 
 &nbsp;
 
@@ -55,9 +87,10 @@ function motionPacketUpdated(packetName) {
 &nbsp;
 
 ## How to use display
+- Download files to your computer
 - Install **NodeJS**
 - Open cmd and run **npm install** in f1-2020-telemetry directory
-- Run **demo.js**
+- Run **telemetry_old.js** with NodeJS
 - Open browser and go to **localhost:3000**
 
 ### How to use smartphone as display
