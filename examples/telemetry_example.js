@@ -1,7 +1,7 @@
 
 
 
-const Telemetry = require('./Telemetry');
+const Telemetry = require('../Telemetry');
 
 // Create new telemetry and start listening port 20777
 const tele = new Telemetry(20777);
