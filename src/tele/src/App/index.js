@@ -13,7 +13,7 @@ import Row from '../components/Row';
 import Cell from '../components/Cell';
 import Bar from '../components/Bar';
 import Led from '../components/Led';
-const socket = io.connect('http://192.168.0.105:3001');
+const socket = io.connect('http://192.168.0.105:3000');
 
 const LED1_COLOR = '#66ff00';
 const LED2_COLOR = '#ff0066';
@@ -82,7 +82,7 @@ export default function App() {
 
             </Row>
             <Row height='76vh'>
-                <Column width='2vw'>
+                <Column width='3vw'>
                     <Bar height='76vh' value='0.266' main='gold'></Bar>
                 </Column>
 
@@ -103,10 +103,12 @@ export default function App() {
                 </Column>
 
                 <Column width='40vw'>
-                    <Cell height='48vh' fontSize='50vh'
-                        onClick={() => openInFullScreen()}
-                        label='gear'
-                    >{test.gear}</Cell>
+                    <Row border height='48vh'>
+                        <Cell height='48vh' fontSize='50vh'
+                            onClick={() => openInFullScreen()}
+                            label='gear'
+                        >{test.gear}</Cell>
+                    </Row>
                 </Column>
 
                 <Column width='30vw'>
