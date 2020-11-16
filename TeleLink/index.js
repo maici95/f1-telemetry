@@ -5,32 +5,46 @@ const express = require('express');
 const http = require('http');
 const io = require('socket.io');
 
+const options = {
+    cors: true
+}
+
 module.exports = class TeleLink {
-    constructor(port) {
+    /**
+     * @param {Number} port Port number for server to be run
+     * @param {String} dir Directory for client files. Directory needs to have index.html file.
+     */
+    constructor(port, dir) {
         /** @private */
         this.app = express();
         /** @private */
         this.http = http.createServer(this.app);
         /** @private */
-        this.io = io(this.http);
+        this.io = io(this.http, options);
 
-        if (port) {
-            this.listen(port);
+        if (port && dir) {
+            this.listen(port, dir);
         }
     }
 
     /**
-     * @param {Number} port Start server in given port
+     * @param {Number} port Port number for server to be run
+     * @param {String} dir Directory for client files. Directory needs to have index.html file.
      */
-    listen(port) {
+    listen(port, dir) {
         if (!port) {
             console.log('Could not start server missing port.');
             return;
         }
-        this.app.use(express.static(__dirname + '/public'));
+        if (!dir) {
+            console.log('Could not start http server Missing directory path.');
+            return;
+        }
+        //this.app.use(express.static(__dirname + '/public'));
+        this.app.use(express.static(dir));
 
         this.app.get('/', (req, res) => {
-            res.sendFile(__dirname + '/index.html');
+            res.sendFile(dir + '/index.html');
         });
 
         this.http.listen(port);
