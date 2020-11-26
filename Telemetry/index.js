@@ -38,21 +38,21 @@ module.exports = class Telemetry {
         this.onUpdateList = [];
 
         /** @type {PacketMotionData} */
-        this.motion = {};
+        this.motion = new PacketMotionData();
         /** @type {PacketSessionData} */
-        this.session = {};
+        this.session = new PacketSessionData();
         /** @type {PacketLapData} */
-        this.lapData = {};
+        this.lapData = new PacketLapData();
         /** @description nothing here */
         this.event = {};
         /** @type {PacketParticipantsData} */
-        this.participants = {};
+        this.participants = new PacketParticipantsData();
         /** @type {PacketCarSetupData} */
-        this.carSetups = {};
+        this.carSetups = new PacketCarSetupData();
         /** @type {PacketCarTelemetryData} */
-        this.carTelemetry = {};
+        this.carTelemetry = new PacketCarTelemetryData();
         /** @type {PacketCarStatusData} */
-        this.carStatus = {};
+        this.carStatus = new PacketCarStatusData();
         /** @description nothing here */
         this.finalClassification = {};
         /** @description nothing here */
