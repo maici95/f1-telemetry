@@ -28,34 +28,60 @@ function motionPacketUpdated(packetName) {
 ```
 
 ## **Server** working with **Telemetry**
-*tele_demo.js*
+*index.js*
 ``` javascript
 const Telemetry = require('./Telemetry');
 const TeleLink = require('./TeleLink');
 
-// Start telemetry and telelink
 const tele = new Telemetry(20777);
 const link = new TeleLink(3000);
 
-// Bind function to car telemetry packet
-tele.addOnUpdate(telemetryData, ['carTelemetry']);
+const express = require('express');
+const app = express();
 
-// Binded function will be called on every carTelemetry packet received from game
-function telemetryData() {
-    const pId = tele.motion.header.playerCarIndex;
-    // Player car speed
-    const speed = tele.carTelemetry.carTelemetryData[pId].speed;
-    // Send speed value to client
-    link.emit('telemetry', { speed: speed });
+// Bind function to packet
+tele.addOnUpdate(teleData, ['lapData']);
+
+// Current lap distance
+let lapDistance = null;
+
+// Send data to client when new packet received from game
+function teleData() {
+    const pId = tele.lapData.header.playerCarIndex;
+
+    if (lapDistance === tele.lapData.lapData[pId].lapDistance) {
+        return;
+    }
+
+    const data = {
+        ...tele.lapData.lapData[pId],
+        ...tele.carTelemetry.carTelemetryData[pId],
+        ...tele.motion.carMotionData[pId],
+        ...tele.session
+    }
+
+    link.emit('teleData', data);
+    lapDistance = tele.lapData.lapData[pId].lapDistance;
 }
+
+const test = app.get('/telemetry', (req, res) => {
+    res.sendFile(__dirname + '/src/view/telemetry/index.html');
+});
+
+link.public(__dirname+'/src/view/telemetry');
+link.route(test);
 ```
 
-&nbsp;
 
+# Experimental telemetry
+*index.js*
+<img src="https://i.ibb.co/PFd1JhP/tele.png">
 
 # Old version
 
-&nbsp;
+## Steering wheel display
+
+<img src="https://i.ibb.co/SVbNKZ4/demo.png">
 
 ## Display show following information "features"
 - RPM lights
@@ -83,9 +109,6 @@ function telemetryData() {
   - Frontwing damage
   - Tyre wear
 
-
-&nbsp;
-
 ## How to use display
 - Download files to your computer
 - Install **NodeJS**
@@ -98,34 +121,3 @@ function telemetryData() {
 - type **ipconfig** and press enter
 - Check IPv4 address example **192.168.0.105**
 - Open **192.168.0.105:3000** on your smartphone's browser
-
-
-&nbsp;
-
-## How to use parser (OLD)
-``` javascript
-import dgram from 'dgram';
-import Parser from './Parser/index.js';
-
-const server = dgram.createSocket('udp4');
-const PORT = 20777;
-const parser = new Parser();
-
-server.on('message', (buffer, rinfo) => {
-    // Parse packet
-    parser.parse(buffer);
-
-    // Parsed data
-    console.log(parser.data);
-});
-
-server.bind(PORT);
-```
-
-&nbsp;
-
-## Current display view
-
-&nbsp;
-
-<img src="https://i.ibb.co/SVbNKZ4/demo.png">
